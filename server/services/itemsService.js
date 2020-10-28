@@ -20,12 +20,12 @@ exports.search = (query) => {
                 });
 
                 if (filter)
-                    list_categories.push(_.head(filter.values).path_from_root.map((cat) => cat.name))
+                    _.head(filter.values).path_from_root.map((cat) => list_categories.push(cat.name));
             }
 
             if (response.data.results)
-                items.push(response.data.results.slice(0, 4).map(item => {
-                    return {
+                response.data.results.slice(0, 4).map(item => {
+                    items.push({
                         id: item.id,
                         title: item.title,
                         price: {
@@ -37,8 +37,8 @@ exports.search = (query) => {
                         condition: item.condition,
                         free_shipping: item.shipping.free_shipping || false,
                         address: item.address.state_name || ''
-                    }
-                }))
+                    })
+                });
 
             return {
                 author: author,
