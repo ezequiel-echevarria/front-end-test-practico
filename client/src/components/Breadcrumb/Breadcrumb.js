@@ -1,11 +1,10 @@
 import React from "react";
-import PropTypes from "prop-types";
 import styles from "./Breadcrumb.module.sass";
 
 const Breadcrumb = ({ categories }) => {
   return (
     <div className={styles.Breadcrumb}>
-      <nav class="breadcrumb has-succeeds-separator" aria-label="breadcrumbs">
+      <nav className="breadcrumb has-succeeds-separator">
         <ul>
           {categories.map((item, index) => {
             return (
@@ -28,8 +27,6 @@ const Breadcrumb = ({ categories }) => {
 };
 Breadcrumb.propTypes = {};
 
-Breadcrumb.defaultProps = {
-  category: [],
-};
+Breadcrumb.defaultProps = {};
 
 export default Breadcrumb;
