@@ -21,7 +21,7 @@ const CajaBusqueda = ({ query }) => {
     <nav className={`navbar ${styles.CajaBusqueda}`}>
       <div className="container">
         <div className="navbar-brand is-flex-grow-0">
-          <a className="navbar-item" href="http://localhost:3000/">
+          <a className="navbar-item" href="/">
             <img src={logoMl} alt="Mercado Libre" />
           </a>
         </div>
