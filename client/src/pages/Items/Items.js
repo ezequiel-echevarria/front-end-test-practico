@@ -5,11 +5,10 @@ import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
 import ItemList from "../../components/ItemList/ItemList";
 import { useHistory } from "react-router-dom";
 
-const Items = () => {
+const Items = ({onCategoriesChange}) => {
   const _URLBase = process.env.REACT_APP_URL_API_BASE;
 
   const [items, setItems] = useState([]);
-  const [categories, setCategories] = useState([]);
 
   const history = useHistory();
 
@@ -23,7 +22,7 @@ const Items = () => {
     if (queryValue && queryValue !== "")
       getItemsByFilter(queryValue).then((data) => {
         setItems(data.items);
-        setCategories(data.categories);
+        onCategoriesChange(data.categories);
       });
   }, [queryValue]);
 
@@ -37,7 +36,6 @@ const Items = () => {
   return (
     <>
       <div className="container">
-        <Breadcrumb categories={categories}></Breadcrumb>
         <section
           className={`section ${styles.itemSection} has-background-white`}
         >

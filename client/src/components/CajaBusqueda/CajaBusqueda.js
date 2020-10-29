@@ -12,7 +12,7 @@ const CajaBusqueda = ({ query }) => {
 
   const handleOnFormSubmit = (ev) => {
     ev.preventDefault();
-    history.push(`items?query=${inputValue}`);
+    history.push(`/items?query=${inputValue}`);
   };
 
   useEffect(() => {}, []);
@@ -21,7 +21,7 @@ const CajaBusqueda = ({ query }) => {
     <nav className={`navbar ${styles.CajaBusqueda}`}>
       <div className="container">
         <div className="navbar-brand is-flex-grow-0">
-          <a className="navbar-item" href="https://www.mercadolibre.com.ar/">
+          <a className="navbar-item" href="http://localhost:3000/">
             <img src={logoMl} alt="Mercado Libre" />
           </a>
         </div>
