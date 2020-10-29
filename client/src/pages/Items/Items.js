@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Items.module.sass";
 import { useLocation } from "react-router-dom";
-import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
-import CajaBusqueda from "../../components/CajaBusqueda/CajaBusqueda";
 import ItemList from "../../components/ItemList/ItemList";
 import { useHistory } from "react-router-dom";
 
-const Items = () => {
+const Items = ({onCategoriesChange}) => {
   const _URLBase = process.env.REACT_APP_URL_API_BASE;
 
   const [items, setItems] = useState([]);
-  const [categories, setCategories] = useState([]);
 
   const history = useHistory();
-  const onSubmitHandler = (value) => history.push(`items?query=${value}`);
 
   const { search } = useLocation();
   const query = new URLSearchParams(search);
@@ -25,7 +21,7 @@ const Items = () => {
     if (queryValue && queryValue !== "")
       getItemsByFilter(queryValue).then((data) => {
         setItems(data.items);
-        setCategories(data.categories);
+        onCategoriesChange(data.categories);
       });
   }, [queryValue]);
 
@@ -38,12 +34,7 @@ const Items = () => {
 
   return (
     <>
-      <CajaBusqueda
-        query={queryValue}
-        onSubmit={onSubmitHandler}
-      ></CajaBusqueda>
       <div className="container">
-        <Breadcrumb categories={categories}></Breadcrumb>
         <section
           className={`section ${styles.itemSection} has-background-white`}
         >

@@ -1,5 +1,18 @@
 const itemsService = require('../services/itemsService');
 
+const handleError = (error, res) => {
+    if (error.response)
+        return res.status(error.response.status).json({
+            status: error.response.status,
+            message: error.response.statusText
+        });
+
+    return res.status(500).json({
+        status: 500,
+        message: 'Error Interno'
+    });
+}
+
 exports.search = (req, res, next) => {
     if (!req.query.q) {
         res.status(400).json({
@@ -9,12 +22,13 @@ exports.search = (req, res, next) => {
         return;
     }
 
-
-    itemsService.search(req.query.q).then((responsePayload) => res.json(responsePayload));
+    itemsService.search(req.query.q)
+        .then((responsePayload) =>
+            res.json(responsePayload))
+        .catch(error => handleError(error, res));
 }
 
 exports.getDetails = (req, res, next) => {
-    console.log(req.params.id);
     if (!req.params.id) {
         res.status(400).json({
             status: 400,
@@ -23,7 +37,8 @@ exports.getDetails = (req, res, next) => {
         return;
     }
 
-    itemsService.getDetails(req.params.id).then((responsePayload) => {
-        res.json(responsePayload);
-    });
+    itemsService.getDetails(req.params.id)
+        .then((responsePayload) => {
+            res.json(responsePayload);
+        }).catch(error => handleError(error, res));
 }

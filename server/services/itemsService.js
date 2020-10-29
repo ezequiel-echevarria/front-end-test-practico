@@ -8,35 +8,41 @@ const author = {
     lastname: "Echevarria"
 }
 
+const categoryFilterPredicate = {
+    "id": "category"
+};
+
+const mapToItem = (item) => {
+    return {
+        id: item.id,
+        title: item.title,
+        price: {
+            currency: item.currency_id,
+            amount: Number.parseInt(item.price),
+            decimals: Number.parseInt((item.price) % 1 * 100)
+        },
+        condition: item.condition,
+        free_shipping: item.shipping.free_shipping,
+    }
+}
+
 exports.search = (query) => {
     return axios.get(`${_BASEURL}/sites/MLA/search?q=${query}`)
         .then((response) => {
             let list_categories = [];
             let items = [];
 
-            if (response.data.filters) {
-                const filter = _.find(response.data.filters, {
-                    "id": "category"
-                });
+            if (_.some(response.data.filters, categoryFilterPredicate))
+                _.head(
+                    _.find(response.data.filters, categoryFilterPredicate).values
+                ).path_from_root.map((cat) => list_categories.push(cat.name));
 
-                if (filter)
-                    _.head(filter.values).path_from_root.map((cat) => list_categories.push(cat.name));
-            }
-
-            if (response.data.results)
+            if (_.some(response.data.results))
                 response.data.results.slice(0, 4).map(item => {
                     items.push({
-                        id: item.id,
-                        title: item.title,
-                        price: {
-                            currency: item.currency_id,
-                            amount: Number.parseInt(item.price),
-                            decimals: Number.parseInt((123.99) % 1 * 100)
-                        },
-                        picture: item.thumbnail || '',
-                        condition: item.condition,
-                        free_shipping: item.shipping.free_shipping || false,
-                        address: item.address.state_name || ''
+                        ...mapToItem(item),
+                        picture: item.thumbnail,
+                        address: item.address.state_name
                     })
                 });
 
@@ -45,11 +51,32 @@ exports.search = (query) => {
                 categories: list_categories,
                 items: items
             };
-        }).catch(errror => console.log(error))
+        }).catch(errror => {
+            throw errror;
+        });
 }
 
+
 exports.getDetails = (id) => {
-    return Promise.resolve({
-        'id': id
-    });
+    return axios.all([
+            axios.get(`${_BASEURL}/items/${id}`),
+            axios.get(`${_BASEURL}/items/${id}/description`)
+        ])
+        .then(axios.spread((itemData, itemDescription) => {
+            let itemDetails = {
+                ...mapToItem(itemData.data),
+                sold_quantity: itemData.data.sold_quantity,
+                description: itemDescription.data.plain_text
+            }
+
+            if (_.some(itemData.data.pictures))
+                itemDetails.picture = _.head(itemData.data.pictures).secure_url
+
+            return {
+                author: author,
+                item: itemDetails,
+            }
+        })).catch(errror => {
+            throw errror;
+        });
 }
