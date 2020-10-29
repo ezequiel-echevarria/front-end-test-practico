@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Items.module.sass";
 import { useLocation } from "react-router-dom";
-import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
 import ItemList from "../../components/ItemList/ItemList";
 import { useHistory } from "react-router-dom";
 
