@@ -49,6 +49,8 @@ const CajaBusqueda = ({ query, onSubmit }) => {
 
 CajaBusqueda.propTypes = {};
 
-CajaBusqueda.defaultProps = {};
+CajaBusqueda.defaultProps = {
+  onSubmit: () => {},
+};
 
 export default CajaBusqueda;
