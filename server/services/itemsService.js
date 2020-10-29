@@ -14,16 +14,16 @@ exports.search = (query) => {
             let list_categories = [];
             let items = [];
 
-            if (response.data.filters) {
+            if (_.some(response.data.filters)) {
                 const filter = _.find(response.data.filters, {
                     "id": "category"
                 });
 
-                if (filter)
+                if (_.some(filter))
                     _.head(filter.values).path_from_root.map((cat) => list_categories.push(cat.name));
             }
 
-            if (response.data.results)
+            if (_.some(response.data.results))
                 response.data.results.slice(0, 4).map(item => {
                     items.push({
                         id: item.id,
@@ -31,12 +31,12 @@ exports.search = (query) => {
                         price: {
                             currency: item.currency_id,
                             amount: Number.parseInt(item.price),
-                            decimals: Number.parseInt((123.99) % 1 * 100)
+                            decimals: Number.parseInt((item.price) % 1 * 100)
                         },
-                        picture: item.thumbnail || '',
+                        picture: item.thumbnail,
                         condition: item.condition,
-                        free_shipping: item.shipping.free_shipping || false,
-                        address: item.address.state_name || ''
+                        free_shipping: item.shipping.free_shipping,
+                        address: item.address.state_name
                     })
                 });
 
@@ -45,11 +45,37 @@ exports.search = (query) => {
                 categories: list_categories,
                 items: items
             };
-        }).catch(errror => console.log(error))
+        }).catch(errror => Promise.reject(error));
 }
 
+
 exports.getDetails = (id) => {
-    return Promise.resolve({
-        'id': id
-    });
+    return axios.all([
+            axios.get(`${_BASEURL}/items/${id}`),
+            axios.get(`${_BASEURL}/items/${id}/description`)
+        ])
+        .then(axios.spread((itemData, itemDescription) => {
+            let itemDetails = {
+                id: itemData.data.id,
+                title: itemData.data.title,
+                price: {
+                    currency: itemData.data.currency_id,
+                    amount: Number.parseInt(itemData.data.price),
+                    decimals: Number.parseInt((itemData.data.price) % 1 * 100)
+                },
+                picture: null,
+                condition: itemData.data.condition,
+                free_shipping: itemData.data.shipping.free_shipping,
+                sold_quantity: itemData.data.sold_quantity,
+                description: itemDescription.data.plain_text
+            }
+
+            if (_.some(itemData.data.pictures))
+                itemDetails.picture = _.head(itemData.data.pictures).secure_url
+
+            return {
+                author: author,
+                item: itemDetails,
+            }
+        })).catch(errror => Promise.reject(error));
 }
