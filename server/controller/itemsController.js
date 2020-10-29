@@ -1,9 +1,17 @@
 const itemsService = require('../services/itemsService');
 
-const handleError = (error, res) => res.status(500).json({
-    status: 500,
-    message: 'Error Interno'
-});
+const handleError = (error, res) => {
+    if (error.response)
+        return res.status(error.response.status).json({
+            status: error.response.status,
+            message: error.response.statusText
+        });
+
+    return res.status(500).json({
+        status: 500,
+        message: 'Error Interno'
+    });
+}
 
 exports.search = (req, res, next) => {
     if (!req.query.q) {
