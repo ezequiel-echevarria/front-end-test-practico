@@ -19,12 +19,15 @@ const Items = () => {
   const query = new URLSearchParams(search);
   const queryValue = query.get("query");
 
+  const onClickHandler = (item) => history.push(`items/${item.id}`);
+
   useEffect(() => {
-    getItemsByFilter(queryValue).then((data) => {
-      setItems(data.items);
-      setCategories(data.categories);
-    });
-  }, []);
+    if (queryValue && queryValue !== "")
+      getItemsByFilter(queryValue).then((data) => {
+        setItems(data.items);
+        setCategories(data.categories);
+      });
+  }, [queryValue]);
 
   const getItemsByFilter = (filter) =>
     fetch(`${_URLBase}items?q=${filter}`, {
@@ -39,15 +42,15 @@ const Items = () => {
         query={queryValue}
         onSubmit={onSubmitHandler}
       ></CajaBusqueda>
-      <div className={styles.Items}>
-        <div className="container">
-          <Breadcrumb categories={categories}></Breadcrumb>
-          <section className={`section has-background-white`}>
-            <div className="container">
-              <ItemList items={items}></ItemList>
-            </div>
-          </section>
-        </div>
+      <div className="container">
+        <Breadcrumb categories={categories}></Breadcrumb>
+        <section
+          className={`section ${styles.itemSection} has-background-white`}
+        >
+          <div className="container">
+            <ItemList items={items} onClick={onClickHandler}></ItemList>
+          </div>
+        </section>
       </div>
     </>
   );
