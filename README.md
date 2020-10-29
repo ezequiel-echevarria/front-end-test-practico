@@ -36,5 +36,20 @@ Construir los siguientes endpoints para ser utilizados desde las vistas:
 
 # Ejecución 
 
+```
+git clone https://github.com/ezequiel-echevarria/front-end-test-practico.git
+cd front-end-test-practico
+cd .\client\
+npm install
+npm run build
+cd ..\server
+npm install
+npm run start
+```
+
+# Url
+http://localhost:3001
+
+
 
 
