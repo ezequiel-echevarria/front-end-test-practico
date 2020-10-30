@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Details.module.sass";
 import { useParams } from "react-router-dom";
+import Service from "../../services/ItemServices";
 
 const Details = () => {
   const _URLBase = process.env.REACT_APP_URL_API_BASE;
@@ -24,18 +25,9 @@ const Details = () => {
 
   useEffect(() => {
     if (id && id !== "") {
-      getItemById(id).then((i) => {
-        setDetails(i.item);
-      });
+      Service.GetItemById(id).then((data) => setDetails(data.item));
     }
   }, [id]);
-
-  const getItemById = (id) =>
-    fetch(`${_URLBase}items/${id}`, {
-      method: "GET",
-    }).then((response) => {
-      if (response.ok) return response.json();
-    });
 
   const formatDecimals = (number) => {
     if (number) return number < 10 ? `0${number}` : number;

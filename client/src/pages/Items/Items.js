@@ -3,10 +3,9 @@ import styles from "./Items.module.sass";
 import { useLocation } from "react-router-dom";
 import ItemList from "../../components/ItemList/ItemList";
 import { useHistory } from "react-router-dom";
+import Service from "../../services/ItemServices";
 
-const Items = ({onCategoriesChange}) => {
-  const _URLBase = process.env.REACT_APP_URL_API_BASE;
-
+const Items = ({ onCategoriesChange }) => {
   const [items, setItems] = useState([]);
 
   const history = useHistory();
@@ -19,18 +18,11 @@ const Items = ({onCategoriesChange}) => {
 
   useEffect(() => {
     if (queryValue && queryValue !== "")
-      getItemsByFilter(queryValue).then((data) => {
+      Service.GetByFilter(queryValue).then((data) => {
         setItems(data.items);
         onCategoriesChange(data.categories);
       });
   }, [queryValue]);
-
-  const getItemsByFilter = (filter) =>
-    fetch(`${_URLBase}items?q=${filter}`, {
-      method: "GET",
-    }).then((response) => {
-      if (response.ok) return response.json();
-    });
 
   return (
     <>
