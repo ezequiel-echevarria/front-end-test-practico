@@ -35,6 +35,7 @@ const CajaBusqueda = ({ query }) => {
                   placeholder="Nunca dejes de buscar"
                   value={inputValue}
                   onChange={handleInputValueChange}
+                  required
                 />
               </p>
               <p className="control">
