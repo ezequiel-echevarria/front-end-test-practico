@@ -18,7 +18,7 @@ const useItems = (queryValue) => {
           setItems(data.items);
           setCategories(data.categories);
         })
-        .catch((err) => {
+        .catch(() => {
           setErrorMessage({
             title: "Error",
             text: "Se ha producido un error inesperado",

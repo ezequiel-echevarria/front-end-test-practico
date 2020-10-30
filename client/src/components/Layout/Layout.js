@@ -1,6 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
-import styles from "./Layout.module.sass";
 import CajaBusqueda from "../CajaBusqueda/CajaBusqueda";
 import Breadcrumb from "../Breadcrumb/Breadcrumb";
 
