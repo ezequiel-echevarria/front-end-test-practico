@@ -3,6 +3,7 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Items from "./pages/Items/Items";
 import Details from "./pages/Details/Details";
+import NotFound from "./pages/NotFound/NotFound";
 import "./App.sass";
 import CajaBusqueda from "./components/CajaBusqueda/CajaBusqueda";
 import Breadcrumb from "./components/Breadcrumb/Breadcrumb";
@@ -29,6 +30,7 @@ const App = () => {
               ></Items>
             )}
           />
+          <Route path="/notfound" component={NotFound} />
           <Route path="/" component={Home} />
         </Switch>
       </div>
