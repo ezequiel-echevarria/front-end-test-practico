@@ -1,43 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styles from "./Items.module.sass";
 import { useLocation } from "react-router-dom";
 import ItemList from "../../components/ItemList/ItemList";
 import { useHistory } from "react-router-dom";
-import Service from "../../services/ItemServices";
 import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
+import useItems from "../../hooks/useItems";
 
-const Items = ({ onCategoriesChange }) => {
-  const [items, setItems] = useState([]);
-
-  const [errorMessage, setErrorMessage] = useState({
-    title: "",
-    text: "",
-    show: false,
-  });
-
+const Items = () => {
   const history = useHistory();
-
   const { search } = useLocation();
   const query = new URLSearchParams(search);
   const queryValue = query.get("query");
-
+  const { items, errorMessage } = useItems(queryValue);
   const onClickHandler = (item) => history.push(`items/${item.id}`);
-
-  useEffect(() => {
-    if (queryValue && queryValue !== "")
-      Service.GetByFilter(queryValue)
-        .then((data) => {
-          setItems(data.items);
-          onCategoriesChange(data.categories);
-        })
-        .catch((err) => {
-          setErrorMessage({
-            title: "Error",
-            text: "Se ha producido un error inesperado",
-            show: true,
-          });
-        });
-  }, [queryValue, onCategoriesChange]);
 
   return (
     <div className="container">

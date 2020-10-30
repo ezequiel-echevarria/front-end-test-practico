@@ -5,7 +5,7 @@ import logoMl from "../../assets/Logo_ML.png";
 import icSearch from "../../assets/ic_Search.png";
 
 const CajaBusqueda = ({ query }) => {
-  const [inputValue, setInputValue] = useState(query);
+  const [inputValue, setInputValue] = useState("");
   const history = useHistory();
 
   const handleInputValueChange = (ev) => setInputValue(ev.target.value);
@@ -15,7 +15,9 @@ const CajaBusqueda = ({ query }) => {
     history.push(`/items?query=${inputValue}`);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if(query) setInputValue(query);
+  }, [query]);
 
   return (
     <nav className={`navbar ${styles.CajaBusqueda}`}>
