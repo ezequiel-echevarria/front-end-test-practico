@@ -37,7 +37,7 @@ const Items = ({ onCategoriesChange }) => {
             show: true,
           });
         });
-  }, [queryValue]);
+  }, [queryValue, onCategoriesChange]);
 
   return (
     <div className="container">

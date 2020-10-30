@@ -46,7 +46,7 @@ const Details = () => {
           });
         });
     }
-  }, [id]);
+  }, [id,history]);
 
   const formatDecimals = (number) => {
     if (number) return number < 10 ? `0${number}` : number;
