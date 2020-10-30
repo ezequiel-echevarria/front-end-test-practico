@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import React from "react";
+import { BrowserRouter, Switch, Route, HashRouter } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Items from "./pages/Items/Items";
 import Details from "./pages/Details/Details";
@@ -10,14 +10,16 @@ import Layout from "./components/Layout/Layout";
 const App = () => {
   return (
     <BrowserRouter>
-      <Layout>
-        <Switch>
-          <Route path="/items/:id" component={Details} />
-          <Route path="/items" component={Items} />
-          <Route path="/notfound" component={NotFound} />
-          <Route path="/" component={Home} />
-        </Switch>
-      </Layout>
+      <HashRouter>
+        <Layout>
+          <Switch>
+            <Route path="/items/:id" component={Details} />
+            <Route path="/items" component={Items} />
+            <Route path="/notfound" component={NotFound} />
+            <Route path="/" component={Home} />
+          </Switch>
+        </Layout>
+      </HashRouter>
     </BrowserRouter>
   );
 };
