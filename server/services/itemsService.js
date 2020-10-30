@@ -51,9 +51,7 @@ exports.search = (query) => {
                 categories: list_categories,
                 items: items
             };
-        }).catch(errror => {
-            throw errror;
-        });
+        })
 }
 
 
@@ -76,7 +74,5 @@ exports.getDetails = (id) => {
                 author: author,
                 item: itemDetails,
             }
-        })).catch(errror => {
-            throw errror;
-        });
+        }))
 }

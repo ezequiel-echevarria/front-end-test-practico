@@ -16,17 +16,25 @@ app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
 app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
+app.use(function (err, req, res, next) {
+
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
+  if (err.response) {
+    res.status(err.response.status).json({
+      status: err.response.status,
+      message: err.response.statusText
+    });
+
+    return;
+  }
+
   res.status(err.status || 500);
   res.json(res.locals.error);
 });
