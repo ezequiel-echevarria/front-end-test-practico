@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Details.module.sass";
 import { useParams } from "react-router-dom";
+import Service from "../../services/ItemServices";
+import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
+import { useHistory } from "react-router-dom";
 
 const Details = () => {
-  const _URLBase = process.env.REACT_APP_URL_API_BASE;
+  const history = useHistory();
 
   let { id } = useParams();
 
@@ -22,20 +25,28 @@ const Details = () => {
     description: "",
   });
 
+  const [errorMessage, setErrorMessage] = useState({
+    title: "",
+    text: "",
+    show: false,
+  });
+
   useEffect(() => {
     if (id && id !== "") {
-      getItemById(id).then((i) => {
-        setDetails(i.item);
-      });
+      Service.GetItemById(id)
+        .then((data) => setDetails(data.item))
+        .catch((err) => {
+          if(err instanceof(Response) && err.status === 404)
+            history.push("/notfound")
+            
+          setErrorMessage({
+            title: "Error",
+            text: "Se ha producido un error inesperado",
+            show: true,
+          });
+        });
     }
-  }, [id]);
-
-  const getItemById = (id) =>
-    fetch(`${_URLBase}items/${id}`, {
-      method: "GET",
-    }).then((response) => {
-      if (response.ok) return response.json();
-    });
+  }, [id,history]);
 
   const formatDecimals = (number) => {
     if (number) return number < 10 ? `0${number}` : number;
@@ -87,6 +98,11 @@ const Details = () => {
           </div>
         </div>
       </section>
+      <ErrorMessage
+        show={errorMessage.show}
+        text={errorMessage.text}
+        title={errorMessage.title}
+      ></ErrorMessage>
     </div>
   );
 };

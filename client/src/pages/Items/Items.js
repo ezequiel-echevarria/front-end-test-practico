@@ -1,49 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styles from "./Items.module.sass";
 import { useLocation } from "react-router-dom";
 import ItemList from "../../components/ItemList/ItemList";
 import { useHistory } from "react-router-dom";
+import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
+import useItems from "../../hooks/useItems";
 
-const Items = ({onCategoriesChange}) => {
-  const _URLBase = process.env.REACT_APP_URL_API_BASE;
-
-  const [items, setItems] = useState([]);
-
+const Items = () => {
   const history = useHistory();
-
   const { search } = useLocation();
   const query = new URLSearchParams(search);
   const queryValue = query.get("query");
-
+  const { items, errorMessage } = useItems(queryValue);
   const onClickHandler = (item) => history.push(`items/${item.id}`);
 
-  useEffect(() => {
-    if (queryValue && queryValue !== "")
-      getItemsByFilter(queryValue).then((data) => {
-        setItems(data.items);
-        onCategoriesChange(data.categories);
-      });
-  }, [queryValue]);
-
-  const getItemsByFilter = (filter) =>
-    fetch(`${_URLBase}items?q=${filter}`, {
-      method: "GET",
-    }).then((response) => {
-      if (response.ok) return response.json();
-    });
-
   return (
-    <>
-      <div className="container">
-        <section
-          className={`section ${styles.itemSection} has-background-white`}
-        >
-          <div className="container">
-            <ItemList items={items} onClick={onClickHandler}></ItemList>
-          </div>
-        </section>
-      </div>
-    </>
+    <div className="container">
+      <section className={`section ${styles.itemSection} has-background-white`}>
+        <div className="container">
+          <ItemList items={items} onClick={onClickHandler}></ItemList>
+        </div>
+      </section>
+      <ErrorMessage
+        show={errorMessage.show}
+        text={errorMessage.text}
+        title={errorMessage.title}
+      ></ErrorMessage>
+    </div>
   );
 };
 
