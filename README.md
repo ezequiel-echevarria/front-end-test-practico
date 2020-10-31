@@ -51,6 +51,8 @@ npm run start
 Con Docker 
 
 ```
+git clone https://github.com/ezequiel-echevarria/front-end-test-practico.git
+cd front-end-test-practico
 docker-compose up
 ```
 
