@@ -36,6 +36,7 @@ Construir los siguientes endpoints para ser utilizados desde las vistas:
 
 # Ejecución 
 
+Sin Contenedores
 ```
 git clone https://github.com/ezequiel-echevarria/front-end-test-practico.git
 cd front-end-test-practico
@@ -47,8 +48,14 @@ npm install
 npm run start
 ```
 
+Con Docker 
+
+```
+docker-compose up
+```
+
 # Url
-http://localhost:3001
+http://localhost:3000
 
 
 
